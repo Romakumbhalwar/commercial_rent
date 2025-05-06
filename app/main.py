@@ -4,7 +4,7 @@ import joblib
 import pandas as pd
 from typing import Optional
 
-from schemas import RentInput
+from app.schemas import RentInput
 
 app = FastAPI()
 
