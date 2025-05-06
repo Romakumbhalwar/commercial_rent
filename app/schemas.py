@@ -1,18 +1,26 @@
 from pydantic import BaseModel
+from typing import Optional
 
-class CommercialPropertyFeatures(BaseModel):
-    area: float
+class RentInput(BaseModel):
+    city: str
+    area: str
     location: str
-    size: float
+    zone: str
+    location_hub: str
     property_type: str
-    furnishing: str
-    security: float
-    maintenance: float
-    brokerage: float
-    amenities: int
-    age: int
-    floor: int
-    total_floor: int
-    carpet_area: float
-    lease_type: str
-    gated_security: str  # 'Yes' or 'No'
+    ownership: str
+    size_in_sqft: float
+    carpet_area_sqft: float
+    private_washroom: str  # Expecting "Yes" or "No"
+    public_washroom: str   # Expecting "Yes" or "No"
+    floor_no: str
+    total_floors: str
+    amenities_count: int
+    electric_charge_included: str  # "Yes"/"No"
+    water_charge_included: str     # "Yes"/"No"
+    property_age: str
+    possession_status: str
+    posted_by: str
+    rent_increase_per_year: str
+    negotiable: str
+    brokerage: str
