@@ -4,7 +4,7 @@ import joblib
 import pandas as pd
 
 # Load model
-model = joblib.load("app/commercial_rent_model.pkl")
+model = joblib.load("app/model/commercial_rent_model.pkl")
 
 # FastAPI app
 app = FastAPI()
