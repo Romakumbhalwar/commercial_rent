@@ -3,6 +3,13 @@ from pydantic import BaseModel
 import joblib
 import pandas as pd
 
+def map_yes_no_to_bool(value):
+    if value == 'Yes':
+        return True
+    elif value == 'No':
+        return False
+    return value
+
 # Load model
 model = joblib.load("app/model/commercial_rent_model.pkl")
 
