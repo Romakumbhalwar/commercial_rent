@@ -1,53 +1,46 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
 import joblib
-import pandas as pd
+import numpy as np
+from app.schemas import CommercialPropertyFeatures
 
+# ✅ Define the missing function used in the model
 def map_yes_no_to_bool(value):
-    if value == 'Yes':
-        return True
-    elif value == 'No':
-        return False
-    return value
+    return 1 if value == 'Yes' else 0
 
-# Load model
-model = joblib.load("app/model/commercial_rent_model.pkl")
-
-# FastAPI app
+# ✅ Initialize FastAPI app
 app = FastAPI()
 
-# Define request schema
-class CommercialProperty(BaseModel):
-    city: str
-    area: str
-    location: str
-    zone: str
-    location_hub: str
-    property_type: str
-    ownership: str
-    size_in_sqft: float
-    carpet_area_sqft: float
-    private_washroom: str
-    public_washroom: str
-    floor_no: str
-    total_floors: str
-    amenities_count: int
-    electric_charge_included: str
-    water_charge_included: str
-    property_age: str
-    possession_status: str
-    posted_by: str
-    rent_increase_per_year: str
-    negotiable: str
-    brokerage: str
+# ✅ Load trained model
+model = joblib.load("app/model/commercial_rent_model.pkl")
 
-# Prediction endpoint
+# ✅ Prediction endpoint
 @app.post("/predict")
-def predict_rent(data: CommercialProperty):
-    # Convert to DataFrame
-    input_df = pd.DataFrame([data.dict()])
-    
-    # Predict rent
-    prediction = model.predict(input_df)[0]
-    
-    return {"predicted_rent": round(prediction, 2)}
+def predict_rent(features: CommercialPropertyFeatures):
+    try:
+        # Convert gated security field
+        gated_sec_bool = map_yes_no_to_bool(features.gated_security)
+
+        # Prepare input (ensure it matches training order)
+        input_data = np.array([[
+            features.area,
+            features.size,
+            features.property_type,
+            features.furnishing,
+            features.security,
+            features.maintenance,
+            features.brokerage,
+            features.amenities,
+            features.age,
+            features.floor,
+            features.total_floor,
+            features.carpet_area,
+            features.lease_type,
+            gated_sec_bool,
+            features.location
+        ]], dtype=object)
+
+        prediction = model.predict(input_data)
+        return {"predicted_rent": round(prediction[0], 2)}
+
+    except Exception as e:
+        return {"error": str(e)}
