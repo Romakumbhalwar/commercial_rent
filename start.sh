@@ -9,4 +9,4 @@ sleep 5
 
 # Start Streamlit frontend
 echo "Starting Streamlit frontend..."
-streamlit run app/streamlit_app.py --server.port 8501
+streamlit run streamlit_app.py --server.port 8501
