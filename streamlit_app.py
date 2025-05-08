@@ -1,42 +1,63 @@
 import streamlit as st
 import requests
 
-st.title("Commercial Rent Prediction")
+st.title("🏢 Commercial Rent Price Prediction")
 
-st.subheader("Enter Property Details")
+st.markdown("Enter commercial property details to get rent prediction:")
 
-# Input fields
-input_data = {
-    "city": st.text_input("City", "nagpur"),
-    "area": st.text_input("Area", "manewada"),
-    "location": st.text_input("Location", "manewada,nagpur"),
-    "zone": st.selectbox("Zone", ["north", "south", "east", "west"]),
-    "location_hub": st.text_input("Location Hub", "Tech Park"),
-    "property_type": st.selectbox("Property Type", ["Office Space", "Shop", "Showroom"]),
-    "ownership": st.selectbox("Ownership", ["Freehold", "Leasehold"]),
-    "size_in_sqft": st.number_input("Size in Sqft", value=1200.0),
-    "carpet_area_sqft": st.number_input("Carpet Area Sqft", value=1000.0),
-    "private_washroom": st.radio("Private Washroom", ["Yes", "No"]),
-    "public_washroom": st.radio("Public Washroom", ["Yes", "No"]),
-    "floor_no": st.text_input("Floor Number", "5th"),
-    "total_floors": st.text_input("Total Floors", "10"),
-    "amenities_count": st.number_input("Amenities Count", value=5),
-    "electric_charge_included": st.radio("Electric Charge Included", ["Yes", "No"]),
-    "water_charge_included": st.radio("Water Charge Included", ["Yes", "No"]),
-    "property_age": st.text_input("Property Age", "5-10 years"),
-    "possession_status": st.selectbox("Possession Status", ["Immediate", "Under Construction"]),
-    "posted_by": st.selectbox("Posted By", ["Owner", "Agent", "Builder"]),
-    "rent_increase_per_year": st.text_input("Expected Rent Increase per Year", "5%"),
-    "negotiable": st.radio("Is Rent Negotiable?", ["Yes", "No"]),
-    "brokerage": st.radio("Brokerage", ["Yes", "No"])
-}
+form = st.form("rent_form")
+city = form.text_input("City")
+area = form.text_input("Area")
+location = form.text_input("Location")
+zone = form.text_input("Zone")
+location_hub = form.text_input("Location Hub")
+property_type = form.selectbox("Property Type", ["Office", "Shop", "Warehouse"])
+ownership = form.selectbox("Ownership", ["Freehold", "Leasehold"])
+size_in_sqft = form.number_input("Size in Sqft", min_value=0.0)
+carpet_area_sqft = form.number_input("Carpet Area in Sqft", min_value=0.0)
+private_washroom = form.selectbox("Private Washroom", ["Yes", "No"])
+public_washroom = form.selectbox("Public Washroom", ["Yes", "No"])
+floor_no = form.text_input("Floor Number (e.g., 5th)")
+total_floors = form.text_input("Total Floors")
+amenities_count = form.slider("Amenities Count", 0, 20)
+electric_charge_included = form.selectbox("Electric Charge Included", ["Yes", "No"])
+water_charge_included = form.selectbox("Water Charge Included", ["Yes", "No"])
+property_age = form.text_input("Property Age (e.g., 5-10 years)")
+possession_status = form.selectbox("Possession Status", ["Immediate", "Within 3 Months", "After 3 Months"])
+posted_by = form.selectbox("Posted By", ["Owner", "Agent"])
+rent_increase_per_year = form.text_input("Rent Increase Per Year (e.g., 5%)")
+negotiable = form.selectbox("Negotiable", ["Yes", "No"])
+brokerage = form.selectbox("Brokerage", ["Yes", "No"])
+submit = form.form_submit_button("Predict Rent")
 
-if st.button("Predict Rent"):
-    try:
-        response = requests.post("https://your-fastapi-url.onrender.com/predict", json=input_data)
-        if response.status_code == 200:
-            st.success(f"🏢 Predicted Monthly Rent: ₹ {response.json()['predicted_rent']}")
-        else:
-            st.error("❌ Failed to get prediction from server.")
-    except Exception as e:
-        st.error(f"🔌 Error connecting to API: {e}")
+if submit:
+    payload = {
+        "city": city,
+        "area": area,
+        "location": location,
+        "zone": zone,
+        "location_hub": location_hub,
+        "property_type": property_type,
+        "ownership": ownership,
+        "size_in_sqft": size_in_sqft,
+        "carpet_area_sqft": carpet_area_sqft,
+        "private_washroom": private_washroom,
+        "public_washroom": public_washroom,
+        "floor_no": floor_no,
+        "total_floors": total_floors,
+        "amenities_count": amenities_count,
+        "electric_charge_included": electric_charge_included,
+        "water_charge_included": water_charge_included,
+        "property_age": property_age,
+        "possession_status": possession_status,
+        "posted_by": posted_by,
+        "rent_increase_per_year": rent_increase_per_year,
+        "negotiable": negotiable,
+        "brokerage": brokerage
+    }
+
+    response = requests.post("https://rental-price-api.onrender.com/predict", json=payload)
+    if response.status_code == 200:
+        st.success(f"Predicted Rent: ₹ {response.json()['predicted_rent']}/month")
+    else:
+        st.error("❌ Failed to get prediction from the server.")

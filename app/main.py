@@ -1,26 +1,24 @@
-from fastapi import FastAPI
-import joblib
-import pandas as pd
-from app.schemas import RentInput
-from app.utils import map_yes_no_to_bool  # ✅ import from utils
+from fastapi import FastAPI, HTTPException
+from app.schemas import RentRequest, RentResponse
+from app.utils import load_model, preprocess_input
+import uvicorn
 
 app = FastAPI()
-
 model = joblib.load("app/model/commercial_rent_model.pkl")
 
 @app.get("/")
 def home():
-    return {"message": "Commercial Rent Prediction API is running."}
+    return {"message": "Welcome to Commercial Rent Prediction API"}
 
-@app.post("/predict")
-def predict_rent(data: RentInput):
-    input_dict = data.dict()
-    input_dict['private_washroom'] = map_yes_no_to_bool(input_dict['private_washroom'])
-    input_dict['public_washroom'] = map_yes_no_to_bool(input_dict['public_washroom'])
-    input_dict['electric_charge_included'] = map_yes_no_to_bool(input_dict['electric_charge_included'])
-    input_dict['water_charge_included'] = map_yes_no_to_bool(input_dict['water_charge_included'])
-    input_dict['negotiable'] = map_yes_no_to_bool(input_dict['negotiable'])
-
-    input_df = pd.DataFrame([input_dict])
-    prediction = model.predict(input_df)[0]
-    return {"predicted_rent": round(prediction, 2)}
+@app.post("/predict", response_model=RentResponse)
+def predict_rent(request: RentRequest):
+    try:
+        print("Incoming request data:", request)
+        input_df = preprocess_input(request)
+        print("Preprocessed input DataFrame:", input_df)
+        prediction = model.predict(input_df)[0]
+        print("Predicted rent:", prediction)
+        return RentResponse(predicted_rent=round(prediction, 2))
+    except Exception as e:
+        print("Prediction error:", str(e))
+        raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")

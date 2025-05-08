@@ -1,7 +1,7 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Literal
 
-class RentInput(BaseModel):
+class RentRequest(BaseModel):
     city: str
     area: str
     location: str
@@ -11,16 +11,19 @@ class RentInput(BaseModel):
     ownership: str
     size_in_sqft: float
     carpet_area_sqft: float
-    private_washroom: str  # Expecting "Yes" or "No"
-    public_washroom: str   # Expecting "Yes" or "No"
+    private_washroom: Literal['Yes', 'No']
+    public_washroom: Literal['Yes', 'No']
     floor_no: str
     total_floors: str
     amenities_count: int
-    electric_charge_included: str  # "Yes"/"No"
-    water_charge_included: str     # "Yes"/"No"
+    electric_charge_included: Literal['Yes', 'No']
+    water_charge_included: Literal['Yes', 'No']
     property_age: str
     possession_status: str
     posted_by: str
     rent_increase_per_year: str
-    negotiable: str
-    brokerage: str
+    negotiable: Literal['Yes', 'No']
+    brokerage: Literal['Yes', 'No']
+
+class RentResponse(BaseModel):
+    predicted_rent: float

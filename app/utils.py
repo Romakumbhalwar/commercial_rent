@@ -1,8 +1,29 @@
-# app/utils.py
-def map_yes_no_to_bool(value):
-    if isinstance(value, str):
-        if value.lower() == 'yes':
-            return True
-        elif value.lower() == 'no':
-            return False
-    return None
+import pandas as pd
+import joblib
+from app.schemas import RentRequest
+import re
+
+model_path = "app/model/commercial_rent_model.pkl"
+
+def load_model():
+    return joblib.load(model_path)
+
+def preprocess_input(request: RentRequest):
+    data = request.dict()
+    df = pd.DataFrame([data])
+
+    # Clean and convert numerical/encoded features
+    df['size_in_sqft'] = pd.to_numeric(df['size_in_sqft'], errors='coerce')
+    df['carpet_area_sqft'] = pd.to_numeric(df['carpet_area_sqft'], errors='coerce')
+    df['floor_no'] = df['floor_no'].str.extract(r'(\d+)').fillna(0).astype(int)
+    df['total_floors'] = df['total_floors'].str.extract(r'(\d+)').fillna(0).astype(int)
+    df['property_age'] = df['property_age'].str.extract(r'(\d+)-?')[0].fillna(0).astype(int)
+    df['electric_charge_included'] = df['electric_charge_included'].map({'Yes': 1, 'No': 0})
+    df['water_charge_included'] = df['water_charge_included'].map({'Yes': 1, 'No': 0})
+    df['private_washroom'] = df['private_washroom'].map({'Yes': 1, 'No': 0})
+    df['public_washroom'] = df['public_washroom'].map({'Yes': 1, 'No': 0})
+    df['negotiable'] = df['negotiable'].map({'Yes': 1, 'No': 0})
+    df['brokerage'] = df['brokerage'].map({'Yes': 1, 'No': 0})
+    df['rent_increase_per_year'] = df['rent_increase_per_year'].str.replace('%', '').astype(float)
+
+    return df
