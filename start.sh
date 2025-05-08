@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# Start FastAPI server (in the background)
+# Start FastAPI backend
+echo "Starting FastAPI backend..."
 uvicorn app.main:app --host 0.0.0.0 --port 8000 &
 
-# Start Streamlit app
-streamlit run streamlit_app.py
+# Wait to ensure backend starts
+sleep 5
+
+# Start Streamlit frontend
+echo "Starting Streamlit frontend..."
+streamlit run app/streamlit_app.py --server.port 8501

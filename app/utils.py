@@ -3,10 +3,12 @@ import joblib
 from app.schemas import RentRequest
 import re
 
-model_path = "app/model/commercial_rent_model.pkl"
+model = joblib.load("app/model/commercial_rent_model.pkl")
 
+def map_yes_no_to_bool(x):
+    return x == "Yes"
 def load_model():
-    return joblib.load(model_path)
+    return joblib.load(app/model/commercial_rent_model.pkl)
 
 def preprocess_input(request: RentRequest):
     data = request.dict()
