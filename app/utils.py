@@ -1,16 +1,15 @@
 import pandas as pd
 import joblib
 from app.schemas import RentRequest
-import re
 
+# Function to load the model
 model = joblib.load("app/model/commercial_rent_model.pkl")
 
-def map_yes_no_to_bool(value):
+# Function to map 'Yes'/'No' values to boolean (for specific fields)
+def map_yes_no_to_bool(value: str) -> int:
     return 1 if value == 'Yes' else 0
 
-def load_model():
-    return joblib.load(app/model/commercial_rent_model.pkl)
-
+# Function to preprocess the input data
 def preprocess_input(request: RentRequest):
     data = request.dict()
     df = pd.DataFrame([data])
@@ -21,12 +20,16 @@ def preprocess_input(request: RentRequest):
     df['floor_no'] = df['floor_no'].str.extract(r'(\d+)').fillna(0).astype(int)
     df['total_floors'] = df['total_floors'].str.extract(r'(\d+)').fillna(0).astype(int)
     df['property_age'] = df['property_age'].str.extract(r'(\d+)-?')[0].fillna(0).astype(int)
-    df['electric_charge_included'] = df['electric_charge_included'].map({'Yes': 1, 'No': 0})
-    df['water_charge_included'] = df['water_charge_included'].map({'Yes': 1, 'No': 0})
-    df['private_washroom'] = df['private_washroom'].map({'Yes': 1, 'No': 0})
-    df['public_washroom'] = df['public_washroom'].map({'Yes': 1, 'No': 0})
-    df['negotiable'] = df['negotiable'].map({'Yes': 1, 'No': 0})
-    df['brokerage'] = df['brokerage'].map({'Yes': 1, 'No': 0})
+    
+    # Map 'Yes'/'No' to 1/0 for boolean fields
+    df['electric_charge_included'] = df['electric_charge_included'].map(map_yes_no_to_bool)
+    df['water_charge_included'] = df['water_charge_included'].map(map_yes_no_to_bool)
+    df['private_washroom'] = df['private_washroom'].map(map_yes_no_to_bool)
+    df['public_washroom'] = df['public_washroom'].map(map_yes_no_to_bool)
+    df['negotiable'] = df['negotiable'].map(map_yes_no_to_bool)
+    df['brokerage'] = df['brokerage'].map(map_yes_no_to_bool)
+
+    # Clean 'rent_increase_per_year' and convert to float
     df['rent_increase_per_year'] = df['rent_increase_per_year'].str.replace('%', '').astype(float)
 
     return df
