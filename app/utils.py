@@ -5,8 +5,9 @@ import re
 
 model = joblib.load("app/model/commercial_rent_model.pkl")
 
-def map_yes_no_to_bool(x):
-    return x == "Yes"
+def map_yes_no_to_bool(value):
+    return 1 if value == 'Yes' else 0
+
 def load_model():
     return joblib.load(app/model/commercial_rent_model.pkl)
 
