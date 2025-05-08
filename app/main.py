@@ -28,8 +28,8 @@ def predict_rent(request: RentRequest):
     try:
         print("Incoming request data:", request)
         
-        # Preprocess input data
-        input_df = preprocess_input(request)
+        # Preprocess input data, ensure any required mapping happens in preprocessing
+        input_df = preprocess_input(request, map_yes_no_to_bool)
         print("Preprocessed input DataFrame:", input_df)
         
         # Make the prediction
