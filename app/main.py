@@ -6,6 +6,7 @@ from app.utils import preprocess_input, map_yes_no_to_bool  # Ensure correct imp
 import uvicorn
 
 # Load the model (ensure the path to the model is correct)
+globals()['map_yes_no_to_bool'] = map_yes_no_to_bool
 model = joblib.load("app/model/commercial_rent_model.pkl")
 
 app = FastAPI()

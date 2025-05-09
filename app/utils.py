@@ -37,5 +37,6 @@ def preprocess_input(request):
     return df
 
 # A utility function to map 'Yes'/'No' to boolean values
-def map_yes_no_to_bool(value):
-    return 1 if value == 'Yes' else 0
+def map_yes_no_to_bool(value: str) -> bool:
+    return value.strip().lower() == 'yes'
+
