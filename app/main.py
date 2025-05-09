@@ -2,7 +2,7 @@ import joblib
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from app.schemas import RentRequest, RentResponse
-from app.utils import preprocess_input, map_yes_no_to_bool
+from app.utils import preprocess_input, map_yes_no_to_bool  # Ensure correct import
 import uvicorn
 
 # Load the model (ensure the path to the model is correct)
@@ -20,7 +20,7 @@ def predict_rent(request: RentRequest):
         print("Incoming request data:", request)
         
         # Preprocess input data, ensure any required mapping happens in preprocessing
-        input_df = preprocess_input(request, map_yes_no_to_bool)
+        input_df = preprocess_input(request)
         print("Preprocessed input DataFrame:", input_df)
         
         # Make the prediction
