@@ -2,11 +2,11 @@ import joblib
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from app.schemas import RentRequest, RentResponse
-from app.utils import preprocess_input, map_yes_no_to_bool  # Ensure correct import
+from app.utils import preprocess_input 
+from app. utils import map_yes_no_to_bool 
 import uvicorn
 
 # Load the model (ensure the path to the model is correct)
-globals()['map_yes_no_to_bool'] = map_yes_no_to_bool
 model = joblib.load("app/model/commercial_rent_model.pkl")
 
 app = FastAPI()
