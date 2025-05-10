@@ -5,10 +5,11 @@ from app.schemas import RentRequest, RentResponse
 from app.utils import preprocess_input 
 from app. utils import map_yes_no_to_bool 
 import uvicorn
+import os
 
 # Load the model (ensure the path to the model is correct)
-model = joblib.load("app/model/commercial_rent_model.pkl")
-
+model_path = os.path.join(os.path.dirname(__file__), "model", "commercial_rent_model.pkl")
+model = joblib.load(model_path)
 app = FastAPI()
 
 @app.get("/")
