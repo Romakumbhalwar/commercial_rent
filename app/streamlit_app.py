@@ -11,7 +11,7 @@ with st.form("rent_form"):
     area = st.text_input("Area")
     location = st.text_input("Location")
     zone = st.text_input("Zone")
-    location_hub = st.selectbox("Location Hub", ["Retail Complex/ Building","business park","others","commercial project","Market/ High Street","IT Park"])
+    location_hub = st.selectbox("Location Hub", ["Retail Complex/ Building", "business park", "others", "commercial project", "Market/ High Street", "IT Park"])
     property_type = st.selectbox("Property Type", ["Office", "Shop", "Showroom"])
     ownership = st.selectbox("Ownership", ["Freehold", "Leasehold", "Rented"])
     size_in_sqft = st.number_input("Size (in sqft)", min_value=100)
@@ -26,11 +26,11 @@ with st.form("rent_form"):
     rent_increase_per_year = st.selectbox("Yearly Rent Increase", ["0%", "5%", "10%", "15%"])
     negotiable = st.selectbox("Rent Negotiable", ["Yes", "No"])
     brokerage = st.selectbox("Brokerage Applicable", ["Yes", "No"])
-    
-    # Fixed or calculated fields
-    floor_no = "5th"
-    total_floors = "10"
-    amenities_count = 5  # Change if needed
+
+    # ✅ Keep as strings if model was trained with "5th", "10", etc.
+    floor_no = st.selectbox("Floor Number", ["Ground", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"])
+    total_floors = st.selectbox("Total Floors in Building", ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11th", "12th"])
+    amenities_count = 5  # You can change this based on checkboxes later
 
     submitted = st.form_submit_button("Predict Rent")
 
@@ -47,8 +47,8 @@ with st.form("rent_form"):
             "carpet_area_sqft": carpet_area_sqft,
             "private_washroom": private_washroom,
             "public_washroom": public_washroom,
-            "floor_no": floor_no,
-            "total_floors": total_floors,
+            "floor_no": floor_no,  # string like "5th"
+            "total_floors": total_floors,  # string like "10"
             "amenities_count": amenities_count,
             "electric_charge_included": electric_charge_included,
             "water_charge_included": water_charge_included,
