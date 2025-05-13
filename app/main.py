@@ -10,7 +10,7 @@ app = FastAPI()
 with open("app/model/commercial_rent_model.pkl", "rb") as f:
     model = joblib.load(f)
 
-@app.post("/predict", response_model=RentResponse)
+@app.post("https://commercial-fastapi.onrender.com/ predict", response_model=RentResponse)
 def predict_rent(request: RentRequest):
     input_df = preprocess_input(request)
 
