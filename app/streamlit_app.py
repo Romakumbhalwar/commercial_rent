@@ -61,7 +61,8 @@ with st.form("rent_form"):
         }
 
         try:
-            response = requests.post("http://localhost:8000/predict", json=payload)
+            response = requests.post("https://commercial-fastapi.onrender.com/predict", json=payload)
+
             if response.status_code == 200:
                 predicted_rent = response.json()["predicted_rent"]
                 st.success(f"💰 Predicted Monthly Rent: ₹{int(predicted_rent):,}")
