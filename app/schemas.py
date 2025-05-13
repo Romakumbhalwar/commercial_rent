@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class RentRequest(BaseModel):
+class CommercialPropertyInput(BaseModel):
     city: str
     area: str
     location: str
