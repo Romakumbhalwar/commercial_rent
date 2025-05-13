@@ -1,12 +1,9 @@
 import pandas as pd
 
-def map_yes_no_to_bool(df):
-    """Convert 'Yes'/'No' columns to True/False."""
-    yes_no_columns = df.select_dtypes(include='object').columns
-    for col in yes_no_columns:
-        if df[col].isin(['Yes', 'No']).all():
-            df[col] = df[col].map({'Yes': True, 'No': False})
-    return df
+def map_yes_no_to_bool(value):
+    if isinstance(value, str):
+        return value.strip().lower() == 'yes'
+    return False
 
 def preprocess_input(request):
     """Convert input request to a DataFrame and map Yes/No to boolean."""
