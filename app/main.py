@@ -6,11 +6,9 @@ import traceback
 app = FastAPI()
 
 # Load your model and pipeline
-model_dict = joblib.load("app/model/commercial_rent_model.pkl")
-model = model_dict['model']
-features = model_dict['features']
+model = joblib.load("app/model/commercial_rent_model.pkl")
 
-@app.post("https://commercial-fastapi.onrender.com/predict")
+@app.post("/predict")  
 def predict_rent(data: CommercialPropertyInput):
     try:
         # Debug: Print incoming request data
@@ -31,8 +29,5 @@ def predict_rent(data: CommercialPropertyInput):
         return {"predicted_rent": round(prediction[0], 2)}
 
     except Exception as e:
-        # Print full traceback in the console
         traceback.print_exc()
-
-        # Return readable error message
         raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
