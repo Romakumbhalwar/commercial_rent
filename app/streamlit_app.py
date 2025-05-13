@@ -1,4 +1,4 @@
-import streamlit as st
+=import streamlit as st
 import requests
 
 st.set_page_config(page_title="Commercial Rent Predictor", layout="centered")
@@ -6,16 +6,16 @@ st.set_page_config(page_title="Commercial Rent Predictor", layout="centered")
 st.title("🏢 Commercial Property Rent Prediction")
 st.write("Enter the property details below to get the estimated monthly rent:")
 
-# Clear previous form data on app restart by resetting state
-if 'submitted' in st.session_state:
-    del st.session_state['submitted']
-
-with st.form("rent_form"):
+with st.form("rent_form", clear_on_submit=True):
     city = st.selectbox("City", ["Nagpur"], key="city")
     area = st.text_input("Area", key="area")
     location = st.text_input("Location", key="location")
     zone = st.text_input("Zone", key="zone")
-    location_hub = st.selectbox("Location Hub", ["Retail Complex/ Building", "business park", "others", "commercial project", "Market/ High Street", "IT Park"], key="location_hub")
+    location_hub = st.selectbox(
+        "Location Hub", 
+        ["Retail Complex/ Building", "business park", "others", "commercial project", "Market/ High Street", "IT Park"], 
+        key="location_hub"
+    )
     property_type = st.selectbox("Property Type", ["Office", "Shop", "Showroom"], key="property_type")
     ownership = st.selectbox("Ownership", ["Freehold", "Leasehold", "Rented"], key="ownership")
     size_in_sqft = st.number_input("Size (in sqft)", min_value=100, key="size_in_sqft")
@@ -30,17 +30,15 @@ with st.form("rent_form"):
     rent_increase_per_year = st.selectbox("Yearly Rent Increase", ["0%", "5%", "10%", "15%"], key="rent_increase_per_year")
     negotiable = st.selectbox("Rent Negotiable", ["Yes", "No"], key="negotiable")
     brokerage = st.selectbox("Brokerage Applicable", ["Yes", "No"], key="brokerage")
-
-    # Keep as strings if model was trained with "5th", "10", etc.
     floor_no = st.selectbox("Floor Number", ["Ground", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"], key="floor_no")
-    total_floors = st.selectbox("Total Floors in Building", ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11th", "12th"], key="total_floors")
-    amenities_count = 5  # You can change this based on checkboxes later
+    total_floors = st.selectbox("Total Floors in Building", [str(i) for i in range(1, 13)], key="total_floors")
+
+    # 🔥 Updated dropdown for amenities count from 1 to 15
+    amenities_count = st.selectbox("Number of Amenities", [str(i) for i in range(1, 16)], key="amenities_count")
 
     submitted = st.form_submit_button("Predict Rent")
 
     if submitted:
-        st.session_state['submitted'] = True  # Track form submission in session state
-        
         payload = {
             "city": city,
             "area": area,
@@ -53,8 +51,8 @@ with st.form("rent_form"):
             "carpet_area_sqft": carpet_area_sqft,
             "private_washroom": private_washroom,
             "public_washroom": public_washroom,
-            "floor_no": floor_no,  # string like "5th"
-            "total_floors": total_floors,  # string like "10"
+            "floor_no": floor_no,
+            "total_floors": total_floors,
             "amenities_count": amenities_count,
             "electric_charge_included": electric_charge_included,
             "water_charge_included": water_charge_included,
