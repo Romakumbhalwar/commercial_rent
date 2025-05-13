@@ -8,7 +8,7 @@ app = FastAPI()
 
 # Load model (dictionary with model and features)
 model_bundle = joblib.load("app/model/commercial_rent_model.pkl")
-model = model_bundle['model']
+model = model_bundle
 features = model_bundle['features']
 
 @app.post("/predict", response_model=RentResponse)
