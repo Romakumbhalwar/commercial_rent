@@ -62,6 +62,7 @@ with st.form("rent_form"):
 
         try:
             response = requests.post("https://commercial-fastapi.onrender.com/predict", json=payload)
+            st.write(f"Response: {response.text}")  # Log full response for debugging
 
             if response.status_code == 200:
                 predicted_rent = response.json()["predicted_rent"]

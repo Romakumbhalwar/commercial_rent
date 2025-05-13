@@ -11,7 +11,6 @@ def map_yes_no_to_bool(df):
             df[col] = df[col].map(mapping)
     return df
 
-
 def preprocess_input(request):
     """Convert input request to a DataFrame and map Yes/No to boolean."""
     df = pd.DataFrame([request.dict()])

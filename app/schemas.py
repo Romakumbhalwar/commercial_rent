@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+import pandas as pd
 
 class CommercialPropertyInput(BaseModel):
     city: str
@@ -8,13 +9,10 @@ class CommercialPropertyInput(BaseModel):
     location_hub: str
     property_type: str
     ownership: str
-    size_in_sqft: float
-    carpet_area_sqft: float
+    size_in_sqft: int
+    carpet_area_sqft: int
     private_washroom: str
     public_washroom: str
-    floor_no: str                # e.g., "5th"
-    total_floors: str           # e.g., "10"
-    amenities_count: int
     electric_charge_included: str
     water_charge_included: str
     property_age: str
@@ -23,6 +21,12 @@ class CommercialPropertyInput(BaseModel):
     rent_increase_per_year: str
     negotiable: str
     brokerage: str
+    floor_no: str
+    total_floors: str
+    amenities_count: int
 
-class RentResponse(BaseModel):
-    predicted_rent: float
+    def to_df(self):
+        # Convert the schema data to a pandas DataFrame
+        data = self.dict()
+        df = pd.DataFrame([data])
+        return df

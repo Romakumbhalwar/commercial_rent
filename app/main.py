@@ -2,23 +2,21 @@ from fastapi import FastAPI, HTTPException
 from app.schemas import CommercialPropertyInput
 import joblib
 import traceback
+from app.utils import preprocess_input
 
 app = FastAPI()
 
 # Load your model and pipeline
 model = joblib.load("app/model/commercial_rent_model.pkl")
 
-@app.post("/predict")  
+@app.post("/predict")
 def predict_rent(data: CommercialPropertyInput):
     try:
-        # Debug: Print incoming request data
-        print("Received data:", data)
-
-        # Convert to DataFrame
-        input_df = data.to_df()
+        # Preprocess input
+        input_df = preprocess_input(data)
 
         # Debug: Show processed dataframe
-        print("Input DataFrame:", input_df)
+        print("Processed DataFrame:", input_df)
 
         # Predict
         prediction = model.predict(input_df)
