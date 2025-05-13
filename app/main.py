@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.schemas import RentRequest, RentResponse
 from app.utils import preprocess_input
+from app.utils import map_yes_no_to_bool 
 import joblib
 
 app = FastAPI()
