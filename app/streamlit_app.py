@@ -15,8 +15,8 @@ with st.form("commercial_form", clear_on_submit=True):
     zone = st.selectbox("Zone", ["", "East", "West", "North", "South"])
     property_type = st.selectbox("Property Type", ["", "Office", "Shop", "Showroom", "Warehouse"])
     ownership = st.selectbox("Ownership", ["", "Freehold", "Leasehold", "Rented"])
-    size_in_sqft = st.number_input("Size (in sqft)", min_value=0, value=900)
-    carpet_area_sqft = st.number_input("Carpet Area (in sqft)", min_value=0, value=870)
+    size_in_sqft = st.number_input("Size (in sqft)", min_value=0, value=0)
+    carpet_area_sqft = st.number_input("Carpet Area (in sqft)", min_value=0, value=0)
 
     private_washroom = st.selectbox("Private Washroom", ["", "Yes", "No"])
     public_washroom = st.selectbox("Public Washroom", ["", "Yes", "No"])
