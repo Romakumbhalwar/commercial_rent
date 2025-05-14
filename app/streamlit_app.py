@@ -15,14 +15,13 @@ with st.form("rent_form", clear_on_submit=True):
     city = st.selectbox("City", ["", "Nagpur"], key="city")
     area = st.text_input("Area", "", key="area")
     location = st.text_input("Location", "", key="location")
-    zone = st.text_input("Zone", "", key="zone")
 
     location_hub = st.selectbox(
         "Location Hub", 
         ["", "Retail Complex/ Building", "business park", "others", "commercial project", "Market/ High Street", "IT Park"], 
         key="location_hub"
     )
-
+    zone = st.selectbox("Zone", ["", "East", "West", "North", "South"], key= "zone")
     property_type = st.selectbox("Property Type", ["", "Office", "Shop", "Showroom"], key="property_type")
     ownership = st.selectbox("Ownership", ["", "Freehold", "Leasehold", "Rented"], key="ownership")
     size_in_sqft = st.number_input("Size (in sqft)", min_value=0, key="size_in_sqft")
