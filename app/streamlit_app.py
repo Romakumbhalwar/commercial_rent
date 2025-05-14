@@ -22,7 +22,7 @@ with st.form("rent_form", clear_on_submit=True):
         key="location_hub"
     )
     zone = st.selectbox("Zone", ["", "East", "West", "North", "South"], key= "zone")
-    property_type = st.selectbox("Property Type", ["", "Office", "Shop", "Showroom"], key="property_type")
+    property_type = st.selectbox("Property Type", ["", "Office", "Shop", "Showroom", "Warehouse"], key="property_type")
     ownership = st.selectbox("Ownership", ["", "Freehold", "Leasehold", "Rented"], key="ownership")
     size_in_sqft = st.number_input("Size (in sqft)", min_value=0, key="size_in_sqft")
     carpet_area_sqft = st.number_input("Carpet Area (in sqft)", min_value=0, key="carpet_area_sqft")
