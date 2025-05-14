@@ -84,5 +84,7 @@ if submitted:
 
 # --- Reset Button ---
 if st.button("🔄 Reset Form"):
-    st.session_state.clear()
-    st.rerun()
+    # Clear all form keys from session state
+    for key in list(st.session_state.keys()):
+        del st.session_state[key]
+    st.experimental_rerun()
