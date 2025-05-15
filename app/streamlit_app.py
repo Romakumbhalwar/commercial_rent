@@ -4,19 +4,20 @@ import requests
 st.set_page_config(page_title="Commercial Rent Predictor", layout="centered")
 st.title("🏢 Commercial Property Rent Prediction")
 
-# Manual reset method: clear session state if reset flag is True
+# Handle reset using query params
 if st.session_state.get("reset_triggered"):
     for key in list(st.session_state.keys()):
         if key != "reset_triggered":
             del st.session_state[key]
     st.session_state["reset_triggered"] = False
+    st.query_params.clear()  # Clears query params and triggers rerun
 
-# Reset button
+# Reset button logic
 if st.button("🔄 Reset Data"):
     st.session_state["reset_triggered"] = True
-    st.experimental_set_query_params(dummy=1)  # This triggers a rerun safely
+    st.query_params["trigger"] = "1"  # Dummy param to trigger rerun
 
-# Input form
+# Form inputs with session state
 with st.form("commercial_form"):
     city = st.selectbox("City", ["", "Nagpur"], key="city")
     area = st.text_input("Area", key="area")
@@ -50,7 +51,7 @@ with st.form("commercial_form"):
 
     submit = st.form_submit_button("Predict Rent")
 
-# API request
+# API Request
 if submit:
     input_data = {
         "city": st.session_state.city,
