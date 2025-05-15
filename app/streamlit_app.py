@@ -4,10 +4,9 @@ import requests
 st.set_page_config(page_title="Commercial Rent Predictor", layout="centered")
 st.title("🏢 Commercial Property Rent Prediction")
 
-# ✅ Reset button functionality
+# ✅ Reset form using session state
 if st.button("🔄 Reset Data"):
-    for key in st.session_state.keys():
-        del st.session_state[key]
+    st.session_state.clear()
     st.rerun()
 
 # ✅ Input form
