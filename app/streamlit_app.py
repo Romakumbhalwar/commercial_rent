@@ -4,47 +4,59 @@ import requests
 st.set_page_config(page_title="Commercial Rent Predictor", layout="centered")
 st.title("🏢 Commercial Property Rent Prediction")
 
-# --- Clear session state and query params BEFORE form loads ---
+# 1️⃣ Define all session keys to reset
+form_keys = [
+    "city", "area", "location", "zone", "location_hub", "property_type", "ownership",
+    "size_in_sqft", "carpet_area_sqft", "private_washroom", "public_washroom",
+    "electric_charge_included", "water_charge_included", "property_age", "possession_status",
+    "posted_by", "rent_increase_per_year", "negotiable", "brokerage", "floor_no",
+    "total_floors", "amenities_count"
+]
+
+# 2️⃣ Check query param to trigger reset
 query_params = st.query_params
-if "trigger_reset" in query_params:
-    st.session_state.clear()
-    query_params.clear()  # clears URL param & triggers rerun (on first load)
+if "reset" in query_params:
+    for key in form_keys:
+        if key in st.session_state:
+            del st.session_state[key]
+    query_params.clear()  # remove ?reset param after clearing
 
-# --- Reset Button ---
+# 3️⃣ Reset button triggers rerun with ?reset param
 if st.button("🔄 Reset Data"):
-    st.query_params["trigger_reset"] = "1"  # add dummy param to trigger rerun
+    st.query_params["reset"] = "1"
+    st.rerun()
 
-# --- Form Section ---
+# 4️⃣ FORM (with keys for all fields)
 with st.form("commercial_form"):
-    city = st.selectbox("City", ["", "Nagpur"])
-    area = st.text_input("Area")
-    location = st.text_input("Location")
-    location_hub = st.selectbox("Location Hub", ["", "Retail Complex/ Building", "business park", "others", "commercial project", "Market/ High Street", "IT Park"])
-    zone = st.selectbox("Zone", ["", "East", "West", "North", "South"])
-    property_type = st.selectbox("Property Type", ["", "Office", "Shop", "Showroom", "Warehouse"])
-    ownership = st.selectbox("Ownership", ["", "Freehold", "Leasehold", "Rented"])
-    size_in_sqft = st.number_input("Size (in sqft)", min_value=0)
-    carpet_area_sqft = st.number_input("Carpet Area (in sqft)", min_value=0)
+    city = st.selectbox("City", ["", "Nagpur"], key="city")
+    area = st.text_input("Area", key="area")
+    location = st.text_input("Location", key="location")
+    location_hub = st.selectbox("Location Hub", ["", "Retail Complex/ Building", "business park", "others", "commercial project", "Market/ High Street", "IT Park"], key="location_hub")
+    zone = st.selectbox("Zone", ["", "East", "West", "North", "South"], key="zone")
+    property_type = st.selectbox("Property Type", ["", "Office", "Shop", "Showroom", "Warehouse"], key="property_type")
+    ownership = st.selectbox("Ownership", ["", "Freehold", "Leasehold", "Rented"], key="ownership")
+    size_in_sqft = st.number_input("Size (in sqft)", min_value=0, key="size_in_sqft")
+    carpet_area_sqft = st.number_input("Carpet Area (in sqft)", min_value=0, key="carpet_area_sqft")
 
-    private_washroom = st.selectbox("Private Washroom", ["", "Yes", "No"])
-    public_washroom = st.selectbox("Public Washroom", ["", "Yes", "No"])
-    electric_charge_included = st.selectbox("Electricity Charges Included", ["", "Yes", "No"])
-    water_charge_included = st.selectbox("Water Charges Included", ["", "Yes", "No"])
+    private_washroom = st.selectbox("Private Washroom", ["", "Yes", "No"], key="private_washroom")
+    public_washroom = st.selectbox("Public Washroom", ["", "Yes", "No"], key="public_washroom")
+    electric_charge_included = st.selectbox("Electricity Charges Included", ["", "Yes", "No"], key="electric_charge_included")
+    water_charge_included = st.selectbox("Water Charges Included", ["", "Yes", "No"], key="water_charge_included")
 
-    property_age = st.selectbox("Age of Property", ["", "0-1 years", "1-5 years", "5-10 years", "10+ years"])
-    possession_status = st.selectbox("Possession Status", ["", "Immediate", "Within 3 Months", "After 3 Months"])
-    posted_by = st.selectbox("Posted By", ["", "Owner", "Agent", "Builder"])
-    rent_increase_per_year = st.selectbox("Yearly Rent Increase", ["", "0%", "5%", "10%", "15%"])
-    negotiable = st.selectbox("Rent Negotiable", ["", "Yes", "No"])
-    brokerage = st.selectbox("Brokerage Applicable", ["", "Yes", "No"])
+    property_age = st.selectbox("Age of Property", ["", "0-1 years", "1-5 years", "5-10 years", "10+ years"], key="property_age")
+    possession_status = st.selectbox("Possession Status", ["", "Immediate", "Within 3 Months", "After 3 Months"], key="possession_status")
+    posted_by = st.selectbox("Posted By", ["", "Owner", "Agent", "Builder"], key="posted_by")
+    rent_increase_per_year = st.selectbox("Yearly Rent Increase", ["", "0%", "5%", "10%", "15%"], key="rent_increase_per_year")
+    negotiable = st.selectbox("Rent Negotiable", ["", "Yes", "No"], key="negotiable")
+    brokerage = st.selectbox("Brokerage Applicable", ["", "Yes", "No"], key="brokerage")
 
-    floor_no = st.selectbox("Floor Number", ["", "Ground", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"])
-    total_floors = st.selectbox("Total Floors in Building", [""] + [str(i) for i in range(1, 13)])
-    amenities_count = st.selectbox("Number of Amenities", [""] + [str(i) for i in range(1, 16)])
+    floor_no = st.selectbox("Floor Number", ["", "Ground", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"], key="floor_no")
+    total_floors = st.selectbox("Total Floors in Building", [""] + [str(i) for i in range(1, 13)], key="total_floors")
+    amenities_count = st.selectbox("Number of Amenities", [""] + [str(i) for i in range(1, 16)], key="amenities_count")
 
     submit = st.form_submit_button("Predict Rent")
 
-# --- Predict API Call ---
+# 5️⃣ On form submit → API call
 if submit:
     input_data = {
         "city": city,
