@@ -4,11 +4,11 @@ import requests
 st.set_page_config(page_title="Commercial Rent Predictor", layout="centered")
 st.title("🏢 Commercial Property Rent Prediction")
 
-# Reset functionality
+# ✅ Reset functionality using correct Streamlit API
 if st.button("🔄 Reset Data"):
-    for key in st.session_state.keys():
+    for key in list(st.session_state.keys()):
         del st.session_state[key]
-    st.experimental_rerun()
+    st.rerun()  
 
 # Form inputs with session state
 with st.form("commercial_form"):
