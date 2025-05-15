@@ -4,12 +4,12 @@ import requests
 st.set_page_config(page_title="Commercial Rent Predictor", layout="centered")
 st.title("🏢 Commercial Property Rent Prediction")
 
-# ✅ Reset the form: Clear session state and rerun
+# ✅ Reset all form data and rerun the app
 if st.button("🔄 Reset Data"):
     st.session_state.clear()
     st.rerun()
 
-# ✅ FORM
+# ✅ Input form
 with st.form("commercial_form"):
     city = st.selectbox("City", ["", "Nagpur"], key="city")
     area = st.text_input("Area", key="area")
@@ -33,13 +33,13 @@ with st.form("commercial_form"):
     negotiable = st.selectbox("Rent Negotiable", ["", "Yes", "No"], key="negotiable")
     brokerage = st.selectbox("Brokerage Applicable", ["", "Yes", "No"], key="brokerage")
 
-    floor_no = st.selectbox("Floor Number", ["", "Ground", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"], key="floor_no")
+    floor_no = st.selectbox("Floor Number", ["", "Ground", "1st", "2nd", "3rd", "4th", "5th"], key="floor_no")
     total_floors = st.selectbox("Total Floors in Building", [""] + [str(i) for i in range(1, 13)], key="total_floors")
     amenities_count = st.selectbox("Number of Amenities", [""] + [str(i) for i in range(1, 16)], key="amenities_count")
 
     submit = st.form_submit_button("Predict Rent")
 
-# ✅ Predict when submitted
+# ✅ On Submit → Make API request
 if submit:
     input_data = {
         "city": city,
@@ -73,6 +73,6 @@ if submit:
             if "predicted_rent" in result:
                 st.success(f"💰 Predicted Monthly Rent: ₹{int(result['predicted_rent']):,}")
             else:
-                st.error(f"Error: {result.get('error', 'Unknown error')}")
+                st.error(f"❌ Error: {result.get('error', 'Unknown error')}")
         except Exception as e:
-            st.error(f"🚫 Failed to connect to the prediction API: {e}")
+            st.error(f"🚫 Failed to connect to API: {e}")
