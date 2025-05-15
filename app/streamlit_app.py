@@ -4,13 +4,12 @@ import requests
 st.set_page_config(page_title="Commercial Rent Predictor", layout="centered")
 st.title("🏢 Commercial Property Rent Prediction")
 
-# ✅ Reset functionality using correct Streamlit API
+# ✅ Reset functionality: clears form inputs AND prediction
 if st.button("🔄 Reset Data"):
-    for key in list(st.session_state.keys()):
-        del st.session_state[key]
-    st.rerun()  
+    st.session_state.clear()  # Clear all session state data
+    st.experimental_rerun()
 
-# Form inputs with session state
+# Form inputs with session state and default values
 with st.form("commercial_form"):
     city = st.selectbox("City", ["", "Nagpur"], key="city")
     area = st.text_input("Area", key="area")
