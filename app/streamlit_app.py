@@ -4,17 +4,10 @@ import requests
 st.set_page_config(page_title="Commercial Rent Predictor", layout="centered")
 st.title("🏢 Commercial Property Rent Prediction")
 
-# ✅ Reset before the form renders
-if "reset_triggered" not in st.session_state:
-    st.session_state.reset_triggered = False
-
-if st.session_state.reset_triggered:
-    st.session_state.clear()
-    st.session_state.reset_triggered = False
-    st.rerun()
-
+# ✅ Reset button functionality
 if st.button("🔄 Reset Data"):
-    st.session_state.reset_triggered = True
+    for key in st.session_state.keys():
+        del st.session_state[key]
     st.rerun()
 
 # ✅ Input form
