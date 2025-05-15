@@ -4,24 +4,12 @@ import requests
 st.set_page_config(page_title="Commercial Rent Predictor", layout="centered")
 st.title("🏢 Commercial Property Rent Prediction")
 
-# 1️⃣ Define session state keys for form fields
-form_keys = [
-    "city", "area", "location", "zone", "location_hub", "property_type", "ownership",
-    "size_in_sqft", "carpet_area_sqft", "private_washroom", "public_washroom",
-    "electric_charge_included", "water_charge_included", "property_age", "possession_status",
-    "posted_by", "rent_increase_per_year", "negotiable", "brokerage", "floor_no",
-    "total_floors", "amenities_count"
-]
-
-# 2️⃣ Reset logic: Clear all session state keys and rerun
+# ✅ Reset the form: Clear session state and rerun
 if st.button("🔄 Reset Data"):
-    for key in form_keys:
-        if key in st.session_state:
-            del st.session_state[key]
-    st.success("✅ Form reset successfully!")
+    st.session_state.clear()
     st.rerun()
 
-# 3️⃣ Form
+# ✅ FORM
 with st.form("commercial_form"):
     city = st.selectbox("City", ["", "Nagpur"], key="city")
     area = st.text_input("Area", key="area")
@@ -51,7 +39,7 @@ with st.form("commercial_form"):
 
     submit = st.form_submit_button("Predict Rent")
 
-# 4️⃣ On submit: API request
+# ✅ Predict when submitted
 if submit:
     input_data = {
         "city": city,
