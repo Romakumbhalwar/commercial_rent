@@ -4,7 +4,7 @@ import requests
 st.set_page_config(page_title="Commercial Rent Predictor", layout="centered")
 st.title("🏢 Commercial Property Rent Prediction")
 
-# 1️⃣ All form keys to reset
+# 1️⃣ Define all session keys to reset
 form_keys = [
     "city", "area", "location", "zone", "location_hub", "property_type", "ownership",
     "size_in_sqft", "carpet_area_sqft", "private_washroom", "public_washroom",
@@ -13,19 +13,14 @@ form_keys = [
     "total_floors", "amenities_count"
 ]
 
-# 2️⃣ Check for ?reset in URL and clear session state
-query_params = st.experimental_get_query_params()
-if "reset" in query_params:
-    for key in form_keys:
-        st.session_state.pop(key, None)
-    st.experimental_set_query_params()  # clear URL params
-
-# 3️⃣ Reset button (adds query param and triggers rerun)
+# 2️⃣ Reset button clears session state and reruns app
 if st.button("🔄 Reset Data"):
-    st.experimental_set_query_params(reset="1")
-    st.experimental_rerun()
+    for key in form_keys:
+        if key in st.session_state:
+            del st.session_state[key]
+    st.rerun()
 
-# 4️⃣ Form UI with keys
+# 3️⃣ FORM (with keys for all fields)
 with st.form("commercial_form"):
     city = st.selectbox("City", ["", "Nagpur"], key="city")
     area = st.text_input("Area", key="area")
@@ -55,7 +50,7 @@ with st.form("commercial_form"):
 
     submit = st.form_submit_button("Predict Rent")
 
-# 5️⃣ On submit → API call
+# 4️⃣ On form submit → API call
 if submit:
     input_data = {
         "city": city,
