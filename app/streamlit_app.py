@@ -4,18 +4,10 @@ import requests
 st.set_page_config(page_title="Commercial Rent Predictor", layout="centered")
 st.title("🏢 Commercial Property Rent Prediction")
 
-# ✅ Force reset fields if reset was triggered
-if "reset_triggered" in st.session_state and st.session_state.reset_triggered:
-    for key in st.session_state.keys():
-        if key != "reset_triggered":
-            del st.session_state[key]
-    st.session_state.reset_triggered = False
-    st.experimental_rerun()
-
-# ✅ Reset button sets trigger
+# ✅ Reset all form data and rerun the app
 if st.button("🔄 Reset Data"):
-    st.session_state.reset_triggered = True
-    st.experimental_rerun()
+    st.session_state.clear()
+    st.rerun()
 
 # ✅ Input form
 with st.form("commercial_form"):
@@ -47,7 +39,7 @@ with st.form("commercial_form"):
 
     submit = st.form_submit_button("Predict Rent")
 
-# ✅ Handle prediction
+# ✅ On Submit → Make API request
 if submit:
     input_data = {
         "city": city,
