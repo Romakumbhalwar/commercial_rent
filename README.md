@@ -4,6 +4,8 @@ This project uses a machine learning pipeline to predict the rental price of
 commercial properties (like office spaces) based on various property attributes. 
 It employs a Random Forest Regressor and includes custom preprocessing logic.
 
+live demo: https://commercial-streamlit.onrender.com
+
 Overview
 
 -  Model: Random Forest Regressor
